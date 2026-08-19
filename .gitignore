@@ -1,0 +1,5 @@
+.DS_Store
+tempCodeRunnerFile.c
+
+web-ui/node_modules/
+web-ui/.next/
