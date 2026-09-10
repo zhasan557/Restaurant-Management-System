@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "customerName": "zahid",
+    "itemName": "Plain Rice",
+    "quantity": 1,
+    "totalAmount": 50,
+    "id": 1,
+    "orderTime": 1789062349128,
+    "status": "Ready"
+  },
+  {
+    "customerName": "zahid",
+    "itemName": "Biryani",
+    "quantity": 1,
+    "totalAmount": 180,
+    "id": 2,
+    "orderTime": 1789062349144,
+    "status": "Delivered"
+  },
+  {
+    "customerName": "zahid",
+    "itemName": "Doner",
+    "quantity": 1,
+    "totalAmount": 200,
+    "id": 3,
+    "orderTime": 1789062349153,
+    "status": "Processing"
+  }
+]

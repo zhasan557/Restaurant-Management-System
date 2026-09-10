@@ -1,5 +1,37 @@
 [
-  { "id": 1, "name": "Plain Rice", "category": "Bengali", "price": 50.0 },
-  { "id": 2, "name": "Biryani", "category": "Pakistani", "price": 180.0 },
-  { "id": 3, "name": "Doner", "category": "Turkish", "price": 200.0 }
+  {
+    "id": 1,
+    "name": "Plain Rice",
+    "category": "Bengali",
+    "price": 50,
+    "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgetcurried.com.au%2Fwp-content%2Fuploads%2F2020%2F08%2Fplain_rice.jpg&f=1&nofb=1&ipt=6ae90420a5dc756104dfd34b43d9cd94bc951fa1dddec658d3c0d349690ded18"
+  },
+  {
+    "id": 2,
+    "name": "Biryani",
+    "category": "Pakistani",
+    "price": 180,
+    "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F066%2F821%2F323%2Flarge_2x%2Frice-and-chicken-biryani-served-with-spicy-indian-curry-free-photo.jpg&f=1&nofb=1&ipt=767d4511ed7e8afcf038657cc9d23beab304130feaa590db64c612886881341c"
+  },
+  {
+    "id": 3,
+    "name": "Doner",
+    "category": "Turkish",
+    "price": 200,
+    "image": "https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "name": "Kabuli Pulao",
+    "category": "Pakistani",
+    "price": 130,
+    "id": 4,
+    "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.nationaldish.world%2Fwp-content%2Fuploads%2FKabuli-Pulao-Afghanistan-national-dish.jpg&f=1&nofb=1&ipt=a7ddc8a55b23b1a077393a58103df4f59f4cd939569bfcefc331136cb9db9b7a"
+  },
+  {
+    "name": "Samucha",
+    "category": "Bengali",
+    "price": 1,
+    "image": "https://www.pinterest.com/pin/519954719486948081/",
+    "id": 5
+  }
 ]

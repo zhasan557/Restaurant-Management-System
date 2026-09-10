@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { cuisineCategories } from '@/lib/menu'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -9,7 +10,8 @@ export default function AdminDashboard() {
   const [menu, setMenu] = useState([])
   const [orders, setOrders] = useState([])
   
-  const [newItem, setNewItem] = useState({ name: '', category: 'Bengali', price: '' })
+  const [newItem, setNewItem] = useState({ name: '', category: 'Bengali', price: '', image: '' })
+  const [editingItem, setEditingItem] = useState<any>(null)
 
   useEffect(() => {
     fetch('/api/menu').then(res => res.json()).then(setMenu)
@@ -26,7 +28,7 @@ export default function AdminDashboard() {
     if(res.ok) {
       const item = await res.json()
       setMenu([...menu, item] as any)
-      setNewItem({ name: '', category: 'Bengali', price: '' })
+      setNewItem({ name: '', category: 'Bengali', price: '', image: '' })
     }
   }
 
@@ -34,6 +36,26 @@ export default function AdminDashboard() {
     const res = await fetch(`/api/menu?id=${id}`, { method: 'DELETE' })
     if(res.ok) {
       setMenu(menu.filter((m: any) => m.id !== id))
+    }
+  }
+
+  const handleUpdateMenu = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const res = await fetch(`/api/menu?id=${editingItem.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: editingItem.name,
+        category: editingItem.category,
+        price: parseFloat(editingItem.price),
+        image: editingItem.image
+      })
+    })
+
+    if (res.ok) {
+      const updatedItem = await res.json()
+      setMenu(menu.map((item: any) => item.id === updatedItem.id ? updatedItem : item) as any)
+      setEditingItem(null)
     }
   }
 
@@ -66,14 +88,18 @@ export default function AdminDashboard() {
                 <div className="input-group">
                   <label>Category</label>
                   <select className="input-field" value={newItem.category} onChange={(e) => setNewItem({...newItem, category: e.target.value})} style={{ appearance: 'none' }}>
-                    <option>Bengali</option>
-                    <option>Pakistani</option>
-                    <option>Turkish</option>
+                    {cuisineCategories.map((category) => (
+                      <option key={category}>{category}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="input-group">
                   <label>Price ($)</label>
                   <input type="number" step="0.01" className="input-field" value={newItem.price} onChange={(e) => setNewItem({...newItem, price: e.target.value})} required />
+                </div>
+                <div className="input-group">
+                  <label>Picture URL</label>
+                  <input type="url" className="input-field" placeholder="https://..." value={newItem.image} onChange={(e) => setNewItem({...newItem, image: e.target.value})} required />
                 </div>
                 <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>Add Item</button>
               </form>
@@ -81,16 +107,49 @@ export default function AdminDashboard() {
             
             <div>
               <h3 style={{ color: 'var(--primary-yellow)', marginBottom: '1.5rem' }}>Current Menu</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1.25rem' }}>
                 {menu.map((item: any) => (
-                  <div key={item.id} className="glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem' }}>
-                    <div>
-                      <h4 style={{ margin: 0 }}>{item.name}</h4>
-                      <p style={{ margin: '0.2rem 0 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>{item.category}</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                      <span style={{ color: 'var(--primary-green)', fontWeight: 600 }}>${item.price.toFixed(2)}</span>
-                      <button className="btn" style={{ background: 'rgba(244, 63, 94, 0.1)', color: '#f43f5e', padding: '0.4rem 0.8rem', fontSize: '0.9rem' }} onClick={() => handleDeleteMenu(item.id)}>Delete</button>
+                  <div key={item.id} className="glass-panel" style={{ overflow: 'hidden', padding: 0 }}>
+                    <img src={item.image ? `/api/image?url=${encodeURIComponent(item.image)}` : 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80'} alt={item.name} style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }} />
+                    <div style={{ padding: '1rem 1.25rem' }}>
+                      {editingItem?.id === item.id ? (
+                        <form onSubmit={handleUpdateMenu}>
+                          <div className="input-group">
+                            <label>Item Name</label>
+                            <input className="input-field" value={editingItem.name} onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })} required />
+                          </div>
+                          <div className="input-group">
+                            <label>Category</label>
+                            <select className="input-field" value={editingItem.category} onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })} style={{ appearance: 'none' }}>
+                              {cuisineCategories.map((category) => <option key={category}>{category}</option>)}
+                            </select>
+                          </div>
+                          <div className="input-group">
+                            <label>Price ($)</label>
+                            <input type="number" step="0.01" className="input-field" value={editingItem.price} onChange={(e) => setEditingItem({ ...editingItem, price: e.target.value })} required />
+                          </div>
+                          <div className="input-group">
+                            <label>Picture URL</label>
+                            <input type="url" className="input-field" value={editingItem.image} onChange={(e) => setEditingItem({ ...editingItem, image: e.target.value })} required />
+                          </div>
+                          <div style={{ display: 'flex', gap: '0.75rem' }}>
+                            <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>Save</button>
+                            <button type="button" className="btn btn-outline" style={{ flex: 1 }} onClick={() => setEditingItem(null)}>Cancel</button>
+                          </div>
+                        </form>
+                      ) : (
+                        <>
+                          <h4 style={{ margin: 0 }}>{item.name}</h4>
+                          <p style={{ margin: '0.2rem 0 1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>{item.category}</p>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                            <span style={{ color: 'var(--primary-green)', fontWeight: 600 }}>${item.price.toFixed(2)}</span>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                              <button className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }} onClick={() => setEditingItem({ ...item, price: String(item.price) })}>Edit</button>
+                              <button className="btn" style={{ background: 'rgba(244, 63, 94, 0.1)', color: '#f43f5e', padding: '0.4rem 0.8rem', fontSize: '0.9rem' }} onClick={() => handleDeleteMenu(item.id)}>Delete</button>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 ))}

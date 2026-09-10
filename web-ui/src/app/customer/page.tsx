@@ -82,13 +82,16 @@ export default function CustomerDashboard() {
               <h2 style={{ color: 'var(--primary-aqua)' }}>Delicious Menu</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '1.5rem' }}>
                 {menu.map((item: any) => (
-                  <div key={item.id} className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', transition: 'transform 0.3s', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h3 style={{ margin: 0, fontSize: '1.2rem' }}>{item.name}</h3>
-                      <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: 'var(--primary-green)', padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600 }}>${item.price.toFixed(2)}</span>
+                  <div key={item.id} className="glass-panel" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'transform 0.3s', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+                    <img src={item.image ? `/api/image?url=${encodeURIComponent(item.image)}` : 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80'} alt={item.name} style={{ width: '100%', height: '190px', objectFit: 'cover', display: 'block' }} />
+                    <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+                        <h3 style={{ margin: 0, fontSize: '1.2rem' }}>{item.name}</h3>
+                        <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: 'var(--primary-green)', padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap' }}>${item.price.toFixed(2)}</span>
+                      </div>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0 }}>{item.category}</p>
+                      <button className="btn btn-outline" style={{ marginTop: 'auto', width: '100%' }} onClick={() => addToCart(item)}>Add to Order</button>
                     </div>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0 }}>{item.category}</p>
-                    <button className="btn btn-outline" style={{ marginTop: 'auto', width: '100%' }} onClick={() => addToCart(item)}>Add to Order</button>
                   </div>
                 ))}
               </div>

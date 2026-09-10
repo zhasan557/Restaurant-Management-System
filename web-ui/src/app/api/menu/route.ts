@@ -20,6 +20,25 @@ export async function POST(request: Request) {
   return NextResponse.json(newItem, { status: 201 })
 }
 
+export async function PUT(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get('id')
+
+  if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+
+  const updates = await request.json()
+  const menu = readData('menu.json')
+  const itemIndex = menu.findIndex((item: any) => item.id === parseInt(id))
+
+  if (itemIndex === -1) return NextResponse.json({ error: 'Menu item not found' }, { status: 404 })
+
+  const updatedItem = { ...menu[itemIndex], ...updates, id: parseInt(id) }
+  menu[itemIndex] = updatedItem
+  writeData('menu.json', menu)
+
+  return NextResponse.json(updatedItem)
+}
+
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')

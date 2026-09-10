@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "username": "zahid",
+    "password": "apqymnbvc",
+    "role": "Customer",
+    "email": "nakorbo@gmail.com",
+    "phone": "01307433152"
+  },
+  {
+    "username": "zhr",
+    "password": "apqymnbvc",
+    "role": "Chef",
+    "email": "chef1.epicurean@gmail.com",
+    "phone": "12345667890"
+  }
+]
